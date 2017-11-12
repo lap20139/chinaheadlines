@@ -1,9 +1,10 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
 from flask  import  Flask
+from flask import render_template
 import feedparser
 
 
@@ -19,17 +20,8 @@ RSS_FEEDS = {'china':'http://news.qq.com/newsgn/rss_newsgn.xml',
 @app.route("/<published>")
 def get_news(published="china"):
     feed=feedparser.parse(RSS_FEEDS[published])
-    first_article = feed['entries'][0]
-    return """<html>
-      <body>
-           <h1>china headlines</h1>
-           <b>{0}</b>
-           <i>{1}</i>
-           <p>{2}</p>
-      </body>
-      </html>""".format(first_article.get("title"),
-                        first_article.get('published'),
-                        first_article.get("summary"))
+    # first_article = feed['entries'][0]
+    return render_template("home.html", articles=feed['entries'])
 
 
 if __name__ == "__main__":
